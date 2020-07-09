@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +16,6 @@ import android.view.ViewGroup;
 
 import com.example.simpleinstagram.Post;
 import com.example.simpleinstagram.PostAdapter;
-import com.example.simpleinstagram.R;
 import com.example.simpleinstagram.databinding.FragmentHomeBinding;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "HomeFragment";
     public static final int POST_LIMIT = 20;
@@ -35,6 +35,7 @@ public class HomeFragment extends Fragment {
     protected PostAdapter postAdapter;
     protected List<Post> allPosts;
     FragmentHomeBinding binding;
+    SwipeRefreshLayout swipeLayout;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -58,6 +59,8 @@ public class HomeFragment extends Fragment {
         postAdapter = new PostAdapter(getContext(), allPosts);
         rvPosts.setAdapter(postAdapter);
         rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        swipeLayout = binding.swipeContainer;
+        swipeLayout.setOnRefreshListener(this);
 
         queryPosts();
     }
@@ -81,5 +84,11 @@ public class HomeFragment extends Fragment {
                 postAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        queryPosts();
+        swipeLayout.setRefreshing(false);
     }
 }
