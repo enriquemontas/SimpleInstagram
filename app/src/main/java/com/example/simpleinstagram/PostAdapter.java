@@ -17,8 +17,12 @@ import com.example.simpleinstagram.databinding.ItemPostBinding;
 import com.parse.ParseFile;
 
 import org.parceler.Parcels;
+import org.w3c.dom.Text;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
@@ -60,18 +64,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         private TextView tvUsername;
         private ImageView ivImage;
         private TextView tvDescription;
+        private TextView tvCreatedAt;
 
         public ViewHolder(@NonNull View itemView) {
             super(binding.getRoot());
             tvUsername = binding.tvUsername;
             ivImage = binding.ivImage;
             tvDescription = binding.tvDescription;
+            tvCreatedAt = binding.tvCreatedAt;
             itemView.setOnClickListener(this);
         }
 
         public void bind(Post post) {
             tvUsername.setText(post.getKeyUser().getUsername());
             tvDescription.setText(post.getKeyDescription());
+            DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+            String s = df.format(post.getKeyCreatedAt());
+            tvCreatedAt.setText(s);
             ParseFile image = post.getKeyImage();
             if (image != null){
                 Glide.with(context).load(image.getUrl()).into(ivImage);

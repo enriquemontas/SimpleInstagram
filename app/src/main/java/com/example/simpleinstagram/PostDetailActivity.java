@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,6 +14,9 @@ import com.example.simpleinstagram.databinding.ActivityPostDetailBinding;
 
 import org.parceler.Parcels;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 public class PostDetailActivity extends AppCompatActivity {
 
     Post post;
@@ -20,6 +24,7 @@ public class PostDetailActivity extends AppCompatActivity {
     TextView tvUsername;
     ImageView ivImage;
     TextView tvDescription;
+    TextView tvCreatedAt;
     ActivityPostDetailBinding binding;
 
     @Override
@@ -33,11 +38,15 @@ public class PostDetailActivity extends AppCompatActivity {
         tvUsername = binding.tvUsername;
         ivImage = binding.ivImage;
         tvDescription = binding.tvDescription;
+        tvCreatedAt = binding.tvCreatedAt;
 
         post = Parcels.unwrap(getIntent().getParcelableExtra(Post.class.getSimpleName()));
 
         tvUsername.setText(post.getKeyUser().getUsername());
         tvDescription.setText(post.getKeyDescription());
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        String s = df.format(post.getKeyCreatedAt());
+        tvCreatedAt.setText(s);
 
         Context context = getApplicationContext();
         Glide.with(context).load(post.getKeyImage().getUrl()).into(ivImage);
