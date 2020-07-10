@@ -31,4 +31,12 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintTop_toTopOf="@id/ivImage"
         tools:layout_editor_absoluteX="89dp" />
+
+    <TextView
+        android:id="@+id/tvCreatedAt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDescription"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="8dp" />
 </LinearLayout>

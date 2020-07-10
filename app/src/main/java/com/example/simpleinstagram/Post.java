@@ -7,6 +7,8 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcel;
 
+import java.util.Date;
+
 @Parcel(analyze={Post.class})
 @ParseClassName("Post")
 public class Post extends ParseObject {
@@ -24,7 +26,9 @@ public class Post extends ParseObject {
 
     public ParseUser getKeyUser() { return getParseUser(KEY_USER); }
 
-    public String getKeyCreatedAt() { return KEY_CREATED_AT; }
+    public Date getKeyCreatedAt() {
+        return this.getCreatedAt();
+    }
 
     public void setKeyDescription(String description){ put(KEY_DESCRIPTION, description); }
 
