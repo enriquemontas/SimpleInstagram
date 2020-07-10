@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.simpleinstagram.EndlessRecyclerViewScrollListener;
 import com.example.simpleinstagram.Post;
 import com.example.simpleinstagram.PostAdapter;
 import com.example.simpleinstagram.databinding.FragmentHomeBinding;
@@ -36,6 +37,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     protected List<Post> allPosts;
     FragmentHomeBinding binding;
     SwipeRefreshLayout swipeLayout;
+    EndlessRecyclerViewScrollListener scrollListener;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -58,11 +60,42 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         allPosts = new ArrayList<>();
         postAdapter = new PostAdapter(getContext(), allPosts);
         rvPosts.setAdapter(postAdapter);
-        rvPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rvPosts.setLayoutManager(layoutManager);
         swipeLayout = binding.swipeContainer;
         swipeLayout.setOnRefreshListener(this);
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.i(TAG, "need more");
+                loadMoreData(page);
+            }
+        };
+        rvPosts.addOnScrollListener(scrollListener);
 
         queryPosts();
+    }
+
+    private void loadMoreData(int page) {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.setSkip((page)*POST_LIMIT);
+        query.setLimit(POST_LIMIT);
+        query.addDescendingOrder(Post.KEY_CREATED_AT);
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null){
+                    Log.e(TAG, "error in retrieving posts", e);
+                    return;
+                }
+                for (Post p : posts){
+                    Log.i(TAG, p.getKeyDescription());
+                }
+                postAdapter.addAll(posts);
+                postAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     protected void queryPosts() {
