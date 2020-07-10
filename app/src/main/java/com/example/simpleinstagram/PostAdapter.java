@@ -46,6 +46,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         return posts.size();
     }
 
+    public void addAll(List<Post> posts) {
+        this.posts.addAll(posts);
+        notifyDataSetChanged();
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvUsername;
