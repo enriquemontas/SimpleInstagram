@@ -29,7 +29,6 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private Switch swSignup;
     private Button btnSignup;
-    private ImageView ivIGLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +42,17 @@ public class LoginActivity extends AppCompatActivity {
             goMainActivity();
         }
 
-        getSupportActionBar().hide();
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setLogo(R.drawable.nav_logo_whiteout);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
         etUsername = binding.etUsername;
         etPassword = binding.etPassword;
         btnLogin = binding.btnLogin;
-        ivIGLogo = binding.ivIGLogo;
         swSignup = binding.swSignup;
         btnSignup = binding.btnSignup;
 
-        Glide.with(getApplicationContext()).load(R.drawable.nav_logo_whiteout)
-                .centerCrop().into(ivIGLogo);
 
         swSignup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
