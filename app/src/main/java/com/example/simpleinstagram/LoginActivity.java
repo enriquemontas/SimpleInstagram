@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.simpleinstagram.databinding.ActivityLoginBinding;
 import com.parse.LogInCallback;
 import com.parse.Parse;
@@ -42,12 +43,17 @@ public class LoginActivity extends AppCompatActivity {
             goMainActivity();
         }
 
+        getSupportActionBar().hide();
+
         etUsername = binding.etUsername;
         etPassword = binding.etPassword;
         btnLogin = binding.btnLogin;
         ivIGLogo = binding.ivIGLogo;
         swSignup = binding.swSignup;
         btnSignup = binding.btnSignup;
+
+        Glide.with(getApplicationContext()).load(R.drawable.nav_logo_whiteout)
+                .centerCrop().into(ivIGLogo);
 
         swSignup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
